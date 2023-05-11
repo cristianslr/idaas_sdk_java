@@ -22,7 +22,7 @@ import pe.gob.reniec.pki.idaas.sdk.utils.UrlQueryString;
 import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
-import java.util.Base64;
+import org.apache.commons.codec.binary.Base64;
 import java.util.LinkedHashMap;
 import java.util.List;
 
@@ -110,10 +110,10 @@ public class ReniecIdaasClient {
 
             try {
                 String[] parts = tokenResponse.getIdToken().split("\\.");
-                tokenResponse.setPayload(new String(Base64.getDecoder().decode(parts[1])));
+                tokenResponse.setPayload(new String(Base64.decodeBase64(parts[1])));
 
                 ObjectMapper objectMapper = new ObjectMapper();
-                idToken = objectMapper.readValue(new String(Base64.getDecoder().decode(parts[1]), "UTF-8"), IdToken.class);
+                idToken = objectMapper.readValue(new String(Base64.decodeBase64(parts[1]), "UTF-8"), IdToken.class);
             } catch (Exception ex) {
                 StringWriter sw = new StringWriter();
                 ex.printStackTrace(new PrintWriter(sw));
